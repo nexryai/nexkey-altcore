@@ -7,10 +7,11 @@ require (
 	github.com/gofiber/contrib/websocket v1.2.2
 	github.com/gofiber/fiber/v2 v2.51.0
 	github.com/gofiber/template/html/v2 v2.0.5
-	github.com/golang-jwt/jwt/v5 v5.0.0
+	github.com/golang-jwt/jwt/v5 v5.2.0
 	github.com/hibiken/asynq v0.24.1
 	github.com/judwhite/argon2 v0.0.0-20190925123640-b53743de020b
 	github.com/lib/pq v1.10.9
+	github.com/nexryai/visualog v0.0.1
 	github.com/redis/go-redis/v9 v9.3.0
 	github.com/valyala/fasthttp v1.51.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -43,7 +44,6 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/nexryai/visualog v0.0.1 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect

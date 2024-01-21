@@ -1,6 +1,7 @@
 package baselib
 
 import (
+	"database/sql"
 	"lab.sda1.net/nexryai/altcore/internal/core/system"
 	"lab.sda1.net/nexryai/altcore/internal/core/utils"
 	"lab.sda1.net/nexryai/altcore/internal/db"
@@ -45,6 +46,18 @@ func (param *UserService) FindOneByName(userName string) (*entities.User, error)
 		return nil, err
 	}
 
+	dbInstance, err := database.DB()
+	if err != nil {
+		panic(err)
+	}
+
+	defer func(dbInstance *sql.DB) {
+		err := dbInstance.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(dbInstance)
+
 	var result entities.User
 	sql := database.Table("user")
 
@@ -72,6 +85,18 @@ func (param *UserService) FindAllAndMap(userIds []string) (*map[string]entities.
 	if err != nil {
 		return nil, err
 	}
+
+	dbInstance, err := database.DB()
+	if err != nil {
+		panic(err)
+	}
+
+	defer func(dbInstance *sql.DB) {
+		err := dbInstance.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(dbInstance)
 
 	var users []entities.User
 

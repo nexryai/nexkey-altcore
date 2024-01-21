@@ -1,6 +1,7 @@
 package v12api
 
 import (
+	"database/sql"
 	"github.com/gofiber/fiber/v2"
 	"lab.sda1.net/nexryai/altcore/internal/core/enum"
 	"lab.sda1.net/nexryai/altcore/internal/core/logger"
@@ -43,6 +44,17 @@ func GetHomeTimeline(ctx *fiber.Ctx) error {
 	var notes *[]entities.Note
 
 	database, _ := db.GetGormEngine()
+	dbInstance, err := database.DB()
+	if err != nil {
+		panic(err)
+	}
+
+	defer func(dbInstance *sql.DB) {
+		err := dbInstance.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(dbInstance)
 
 	err = database.Preload("User").
 		Preload("User.Avatar").

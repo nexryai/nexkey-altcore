@@ -2,6 +2,7 @@ package logger
 
 import (
 	"fmt"
+	"github.com/nexryai/visualog"
 	"os"
 )
 
@@ -48,4 +49,14 @@ func Warn(text string) {
 
 func Debug(text string) {
 	fmt.Println(blue + "⚙ DEBUG: " + text + reset)
+}
+
+func GetLogger(moduleName string) *visualog.Logger {
+	return &visualog.Logger{
+		ModuleName: moduleName,
+		ShowDebug:  true,
+		ShowCaller: true,
+		ShowTrace:  true,
+		ShowTime:   true,
+	}
 }

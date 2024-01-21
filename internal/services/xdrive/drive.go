@@ -1,6 +1,7 @@
 package xdrive
 
 import (
+	"database/sql"
 	"fmt"
 	"lab.sda1.net/nexryai/altcore/internal/core/system"
 	"lab.sda1.net/nexryai/altcore/internal/db"
@@ -20,18 +21,30 @@ func (param *DriveService) FindOne() (entities.DriveFile, error) {
 	cacheExist := kv.GetKvCache(cacheKey, &result)
 
 	if !cacheExist {
-		engine, err := db.GetEngine()
+		database, err := db.GetGormEngine()
 		if err != nil {
 			return result, err
 		}
 
-		sql := engine.Table("drive_file")
+		dbInstance, err := database.DB()
+		if err != nil {
+			panic(err)
+		}
+
+		defer func(dbInstance *sql.DB) {
+			err := dbInstance.Close()
+			if err != nil {
+				panic(err)
+			}
+		}(dbInstance)
+
+		sql := database.Table("drive_file")
 		sql.Where("\"id\" = ?", param.FileId)
 		if param.LocalOnly {
 			sql.Where("\"userHost\" is NULL")
 		}
 
-		_, err = sql.Get(&result)
+		err = sql.First(&result).Error
 		if err != nil {
 			return result, err
 		}
@@ -52,20 +65,32 @@ func (param *DriveService) FindAllAndMap(fileIds []string) (*map[string]entities
 
 	cacheExists := kv.GetKvCache(cacheKey, &result)
 	if !cacheExists {
-		engine, err := db.GetEngine()
+		database, err := db.GetGormEngine()
 		if err != nil {
 			return nil, err
 		}
 
+		dbInstance, err := database.DB()
+		if err != nil {
+			panic(err)
+		}
+
+		defer func(dbInstance *sql.DB) {
+			err := dbInstance.Close()
+			if err != nil {
+				panic(err)
+			}
+		}(dbInstance)
+
 		var files []entities.DriveFile
 
-		sql := engine.Table("drive_file")
-		sql.In("id", fileIds)
+		sql := database.Table("drive_file")
+		sql.Where("id IN (?)", fileIds)
 		if param.LocalOnly {
 			sql.Where("host is NULL")
 		}
 
-		if err := sql.Find(&files); err != nil {
+		if err := sql.Find(&files).Error; err != nil {
 			return nil, err
 		}
 

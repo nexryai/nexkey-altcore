@@ -1,8 +1,6 @@
 module lab.sda1.net/nexryai/altcore
 
-go 1.21
-
-toolchain go1.21.4
+go 1.21.5
 
 require (
 	github.com/go-fed/httpsig v1.1.0
@@ -45,6 +43,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/nexryai/visualog v0.0.1 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect

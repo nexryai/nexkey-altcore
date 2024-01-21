@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 	gormlogger "gorm.io/gorm/logger"
 	"lab.sda1.net/nexryai/altcore/internal/core/config"
+	"lab.sda1.net/nexryai/altcore/internal/core/logger"
 	"lab.sda1.net/nexryai/altcore/internal/core/system"
 	"xorm.io/xorm"
 )
@@ -30,6 +31,8 @@ func GetEngine() (*xorm.Engine, error) {
 }
 
 func GetGormEngine() (*gorm.DB, error) {
+	log := logger.GetLogger("Database")
+
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable",
 		config.DB.Host,
 		config.DB.User,
@@ -42,6 +45,7 @@ func GetGormEngine() (*gorm.DB, error) {
 		Logger: gormlogger.Default.LogMode(gormlogger.Info),
 	})
 	if err != nil {
+		log.ErrorWithDetail("Error connecting to database", err)
 		return nil, err
 	}
 

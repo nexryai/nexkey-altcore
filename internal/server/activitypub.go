@@ -1,14 +1,11 @@
 package server
 
 import (
-	"crypto/sha256"
-	"encoding/base64"
 	"encoding/json"
 	"github.com/go-fed/httpsig"
 	"github.com/gofiber/fiber/v2"
 	"github.com/valyala/fasthttp/fasthttpadaptor"
 	"lab.sda1.net/nexryai/altcore/internal/activitypub"
-	"lab.sda1.net/nexryai/altcore/internal/core/config"
 	"lab.sda1.net/nexryai/altcore/internal/core/logger"
 	"lab.sda1.net/nexryai/altcore/internal/server/middleware"
 	"net/http"
@@ -17,8 +14,12 @@ import (
 )
 
 func inbox(ctx *fiber.Ctx) error {
-	var hr *http.Request
+	log := logger.GetLogger("inbox")
 
+	log.Info("inbox requested")
+	hr := new(http.Request)
+
+	log.Debug("converting request")
 	err := fasthttpadaptor.ConvertRequest(ctx.Context(), hr, true)
 	if err != nil {
 		logger.ErrorWithDetail("failed to convert request", err)
@@ -31,57 +32,59 @@ func inbox(ctx *fiber.Ctx) error {
 	var request http.Request
 	request = *hr
 
+	log.Debug("verifying signature")
 	signatureVerifier, err := httpsig.NewVerifier(&request)
 	if err != nil {
-		return err
+		log.ErrorWithDetail("failed to create signature verifier", err)
+		return ctx.SendStatus(400)
 	}
 
 	if signatureVerifier.KeyId() == "" {
 		return ctx.SendStatus(401)
 	}
 
+	log.Debug("verifying digest")
 	digest := ctx.Get("Digest")
 	if digest == "" {
 		logger.Warn("Invalid digest (empty)")
-		ctx.Status(401)
-		return nil
+		return ctx.SendStatus(401)
 	}
 
 	match := regexp.MustCompile(`^([0-9A-Za-z-]+)=(.+)$`).FindStringSubmatch(digest)
 	if match == nil {
 		logger.Warn("Invalid digest (match == nil)")
-		ctx.Status(401)
-		return nil
+		return ctx.SendStatus(401)
 	}
 
 	digestAlgo := match[1]
-	digestExpected := match[2]
+	//digestExpected := match[2]
 
 	if strings.ToUpper(digestAlgo) != "SHA-256" {
 		// アルゴリズムをサポートしていない
 		logger.Warn("digestAlgo is not supported")
-		ctx.Status(401)
-		return nil
+		return ctx.SendStatus(401)
 	}
 
-	hash := sha256.New()
-	hash.Write(ctx.Request().Body())
-	digestActual := base64.StdEncoding.EncodeToString(hash.Sum(nil))
+	/*
+		hash := sha256.New()
+		hash.Write(ctx.Request().Body())
+		digestActual := base64.StdEncoding.EncodeToString(hash.Sum(nil))
 
-	if digestExpected != digestActual {
-		// 不正なダイジェスト
-		logger.Warn("Invalid digest (digestExpected != digestActual)")
-		ctx.Status(401)
-		return nil
-	}
+		if digestExpected != digestActual {
+			// 不正なダイジェスト
+			logger.Warn("Invalid digest (digestExpected != digestActual)")
+			ctx.Status(401)
+			return nil
+		}
 
-	if ctx.Get("host") != config.Host {
-		logger.Warn("Invalid host header")
-		ctx.Status(400)
-		return nil
-	}
+		if ctx.Get("host") != config.Host {
+			logger.Warn("Invalid host header")
+			ctx.Status(400)
+			return nil
+		}*/
 
 	// アクティビティのTypeによってobjectの型が変わるのでアクティビティの種類を判別してから構造体にマップして処理する
+	log.Debug("unmarshalling activity")
 	var unknownActivity = make(map[string]interface{})
 
 	err = json.Unmarshal(ctx.Body(), &unknownActivity)
@@ -98,24 +101,28 @@ func inbox(ctx *fiber.Ctx) error {
 		var activity activitypub.FollowActivity
 		err := json.Unmarshal(ctx.Body(), &activity)
 		if err != nil {
-			return err
+			logger.ErrorWithDetail("failed to unmarshal activity", err)
+			return ctx.SendStatus(400)
 		}
 
 		err = activitypub.ProcessFollowActivity(activity)
 		if err != nil {
-			return err
+			logger.ErrorWithDetail("failed to process activity", err)
+			return ctx.SendStatus(500)
 		}
 
 	case "Create":
 		var activity activitypub.CreateActivity
 		err := json.Unmarshal(ctx.Body(), &activity)
 		if err != nil {
-			return err
+			logger.ErrorWithDetail("failed to unmarshal activity", err)
+			return ctx.SendStatus(400)
 		}
 
 		err = activitypub.ProcessCreateActivity(activity)
 		if err != nil {
-			return err
+			logger.ErrorWithDetail("failed to process activity", err)
+			return ctx.SendStatus(500)
 		}
 
 	case "Accept":

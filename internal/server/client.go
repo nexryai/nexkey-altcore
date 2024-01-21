@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"html/template"
 	"lab.sda1.net/nexryai/altcore/internal/core/config"
@@ -52,6 +53,31 @@ func MkClientRouter(app *fiber.App, manifest ClientManifest) {
 	app.Static("/assets/tabler-icons/fonts", "built/_client_dist_/tabler-icons/fonts")
 	app.Static("/twemoji", "packages/client/node_modules/@discordapp/twemoji/dist")
 	app.Static("/", "server/static")
+
+	app.Get("/proxy/*", func(ctx *fiber.Ctx) error {
+		url := ctx.Query("url")
+		isAvatar := ctx.Query("avatar") == "1"
+		isThumbnail := ctx.Query("thumbnail") == "1"
+		isEmoji := ctx.Query("emoji") == "1"
+		isTicker := ctx.Query("ticker") == "1"
+
+		if url == "" {
+			return ctx.SendStatus(400)
+		}
+
+		proxyQuery := fmt.Sprintf("url=%s", url)
+		if isAvatar {
+			proxyQuery += "&avatar=1"
+		} else if isThumbnail {
+			proxyQuery += "&thumbnail=1"
+		} else if isEmoji {
+			proxyQuery += "&emoji=1"
+		} else if isTicker {
+			proxyQuery += "&ticker=1"
+		}
+
+		return ctx.Redirect(config.MediaProxy + "?" + proxyQuery)
+	})
 
 	app.Get("/debug", func(ctx *fiber.Ctx) error {
 		return ctx.Render("debug", fiber.Map{

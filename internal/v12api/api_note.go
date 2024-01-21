@@ -54,31 +54,6 @@ func ShowNote(ctx *fiber.Ctx) error {
 		Cw:         note.Cw,
 	}
 
-	if note.ReplyId != nil {
-		resp.ReplyId = *note.ReplyId
-
-		replayNote, err := noteService.FindOne(*note.ReplyId)
-		if errors.Is(err, system.NoteNotFound) {
-			// 閲覧権限がないノートへのリプライも表示しない
-			return ctx.SendStatus(404)
-		} else if err != nil {
-			logger.ErrorWithDetail("failed to find note", err)
-			return ctx.SendStatus(500)
-		}
-
-		resp.Reply = &schema.Note{
-			Id:         replayNote.Id,
-			UserId:     replayNote.UserId,
-			Visibility: replayNote.Visibility,
-			Text:       replayNote.Text,
-			CreatedAt:  replayNote.CreatedAt,
-			LocalOnly:  replayNote.LocalOnly,
-			Reactions:  replayNote.Reactions,
-			Uri:        replayNote.Uri,
-			Cw:         note.Cw,
-		}
-	}
-
 	return ctx.JSON(resp)
 }
 
@@ -97,8 +72,8 @@ func CreateNote(ctx *fiber.Ctx) error {
 		Text:       req.Text,
 		CreatedAt:  time.Now(),
 		LocalOnly:  true,
-		Reactions:  make(map[string]interface{}),
-		UserHost:   nil,
+		Reactions:  []uint8{},
+		UserHost:   "",
 		Uri:        fmt.Sprintf("%s/notes/%s", config.URL, noteId),
 	}
 
@@ -113,7 +88,7 @@ func CreateNote(ctx *fiber.Ctx) error {
 			return ctx.SendStatus(400)
 		}
 
-		note.ReplyId = &req.ReplyId
+		note.ReplyId = req.ReplyId
 	}
 
 	noteService := xnote.NoteService{

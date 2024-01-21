@@ -13,14 +13,14 @@ func GetInstanceMeta() *entities.Meta {
 	cacheExist := kv.GetKvCache("meta", &meta)
 
 	if !cacheExist {
-		engine, err := db.GetEngine()
+		database, err := db.GetGormEngine()
 		if err != nil {
 			panic(err)
 		}
 
-		sql := engine.Table("meta")
+		sql := database.Table("meta")
 		sql.Where("id = ?", "x")
-		_, err = sql.Get(&meta)
+		err = sql.First(&meta).Error
 		if err != nil {
 			logger.ErrorWithDetail("Failed to get instance metadata", err)
 			panic(err)

@@ -6,8 +6,8 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"lab.sda1.net/nexryai/altcore/internal/core/config"
 	"lab.sda1.net/nexryai/altcore/internal/core/logger"
-	"lab.sda1.net/nexryai/altcore/internal/services/auth"
-	"lab.sda1.net/nexryai/altcore/internal/services/baselib"
+	authService "lab.sda1.net/nexryai/altcore/internal/services/auth"
+	instanceCore "lab.sda1.net/nexryai/altcore/internal/services/baselib"
 	"lab.sda1.net/nexryai/altcore/internal/v12api/schema"
 	"time"
 )
@@ -25,7 +25,7 @@ func SignIn(req *schema.SignInRequest) (schema.SignInResp, error) {
 		return schema.SignInResp{}, ErrorInvalidParams
 	}
 
-	userService := baselib.UserService{
+	userService := instanceCore.UserService{
 		LocalOnly: true,
 	}
 
@@ -35,7 +35,7 @@ func SignIn(req *schema.SignInRequest) (schema.SignInResp, error) {
 	}
 
 	// Check password
-	if auth.PasswordIsOk(i.Id, req.Password) {
+	if authService.PasswordIsOk(i.Id, req.Password) {
 		claims := jwt.MapClaims{
 			"accountToken": i.Token,
 			"id":           i.Id,

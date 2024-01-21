@@ -13,13 +13,13 @@ type UserService struct {
 }
 
 func (param *UserService) FindOne(userId string) (entities.User, error) {
-	engine, err := db.GetEngine()
+	database, err := db.GetGormEngine()
 	if err != nil {
 		return entities.User{}, err
 	}
 
 	var result entities.User
-	sql := engine.Table("user")
+	sql := database.Preload("Avatar").Preload("Banner").Table("user")
 
 	if userId != "" {
 		sql.Where("id = ?", userId)
@@ -31,7 +31,7 @@ func (param *UserService) FindOne(userId string) (entities.User, error) {
 		sql.Where("host is NULL")
 	}
 
-	_, err = sql.Get(&result)
+	err = sql.Find(&result).Error
 	if err != nil {
 		return entities.User{}, err
 	}
@@ -40,16 +40,16 @@ func (param *UserService) FindOne(userId string) (entities.User, error) {
 }
 
 func (param *UserService) FindOneByName(userName string) (*entities.User, error) {
-	engine, err := db.GetEngine()
+	database, err := db.GetGormEngine()
 	if err != nil {
 		return nil, err
 	}
 
 	var result entities.User
-	sql := engine.Table("user")
+	sql := database.Table("user")
 
 	if userName != "" {
-		sql.Where("usernameLower = ?", strings.ToLower(userName))
+		sql.Where("\"usernameLower\" = ?", strings.ToLower(userName))
 	} else {
 		panic(system.InvalidParamsOnServiceCall)
 	}
@@ -58,7 +58,7 @@ func (param *UserService) FindOneByName(userName string) (*entities.User, error)
 		sql.Where("host is NULL")
 	}
 
-	_, err = sql.Get(&result)
+	err = sql.First(&result).Error
 	if err != nil {
 		return nil, err
 	}

@@ -6,8 +6,7 @@ import (
 	"lab.sda1.net/nexryai/altcore/internal/core/logger"
 	"lab.sda1.net/nexryai/altcore/internal/db"
 	"lab.sda1.net/nexryai/altcore/internal/db/entities"
-	"lab.sda1.net/nexryai/altcore/internal/services/baselib"
-	"lab.sda1.net/nexryai/altcore/internal/services/xdrive"
+	instanceCore "lab.sda1.net/nexryai/altcore/internal/services/baselib"
 	"lab.sda1.net/nexryai/altcore/internal/v12api/schema"
 	"strings"
 )
@@ -15,7 +14,7 @@ import (
 func GetAccountInfo(ctx *fiber.Ctx) error {
 	userId := getUserId(ctx)
 
-	userService := baselib.UserService{
+	userService := instanceCore.UserService{
 		LocalOnly: true,
 	}
 
@@ -23,38 +22,24 @@ func GetAccountInfo(ctx *fiber.Ctx) error {
 	if err != nil {
 		logger.ErrorWithDetail("Failed to get user info", err)
 		return ctx.Status(500).SendString("Failed to get user info")
+	} else if myUserInfo.Id == "" {
+		return ctx.Status(404).SendString("User not found")
 	}
 
 	myProfile, err := userService.GetProfile(userId)
 	if err != nil {
 		logger.ErrorWithDetail("Failed to get user profile", err)
 		return ctx.Status(500).SendString("Failed to get user info")
+	} else if myProfile.Id == "" {
+		return ctx.Status(500).SendString("Broken user profile")
 	}
 
-	var myAvatar entities.DriveFile
-	if myUserInfo.AvatarId != "" {
-		driveService := xdrive.DriveService{
-			FileId:    myUserInfo.AvatarId,
-			LocalOnly: true,
-		}
-		myAvatar, err = driveService.FindOne()
-		if err != nil {
-			logger.Warn("Unexpected error")
-			logger.Warn(err.Error())
-		}
+	if myUserInfo.Avatar == nil {
+		myUserInfo.Avatar = &entities.DriveFile{}
 	}
 
-	var myBanner entities.DriveFile
-	if myUserInfo.BannerId != "" {
-		driveService := xdrive.DriveService{
-			FileId:    myUserInfo.BannerId,
-			LocalOnly: true,
-		}
-		myBanner, err = driveService.FindOne()
-		if err != nil {
-			logger.Warn("Unexpected error")
-			logger.Warn(err.Error())
-		}
+	if myUserInfo.Banner == nil {
+		myUserInfo.Banner = &entities.DriveFile{}
 	}
 
 	return ctx.JSON(&schema.MyAccount{
@@ -66,11 +51,11 @@ func GetAccountInfo(ctx *fiber.Ctx) error {
 		Location:       myProfile.Location,
 		IsCat:          myUserInfo.IsCat,
 		AvatarId:       myUserInfo.AvatarId,
-		AvatarURL:      myAvatar.URL,
-		AvatarBlurhash: myAvatar.BlurHash,
+		AvatarURL:      myUserInfo.Avatar.URL,
+		AvatarBlurhash: myUserInfo.Avatar.BlurHash,
 		BannerId:       myUserInfo.BannerId,
-		BannerUrl:      myBanner.URL,
-		BannerBlurhash: myBanner.BlurHash,
+		BannerUrl:      myUserInfo.Banner.URL,
+		BannerBlurhash: myUserInfo.Banner.BlurHash,
 	})
 }
 

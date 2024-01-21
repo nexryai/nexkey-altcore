@@ -17,9 +17,9 @@ var (
 	Client           = serverConfig.Client
 	DB               = serverConfig.DB
 	Redis            = serverConfig.Redis
-	Sonic            = serverConfig.Sonic
 	Host             = getHostFromUrl(serverConfig.URL)
 	QueueConcurrency = serverConfig.QueueConcurrency
+	MediaProxy       = serverConfig.MediaProxy
 )
 
 func getHostFromUrl(urlStr string) string {

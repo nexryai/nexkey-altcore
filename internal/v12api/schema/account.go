@@ -7,9 +7,9 @@ type MyAccount struct {
 	Name                            string    `json:"name"`
 	Username                        string    `json:"username"`
 	Host                            *string   `json:"host"`
-	AvatarURL                       string    `json:"avatarUrl"`
-	AvatarBlurhash                  string    `json:"avatarBlurhash"`
-	AvatarColor                     string    `json:"avatarColor"`
+	AvatarURL                       string    `json:"avatarUrl,omitempty"`
+	AvatarBlurhash                  string    `json:"avatarBlurhash,omitempty"`
+	AvatarColor                     string    `json:"avatarColor,omitempty"`
 	IsAdmin                         bool      `json:"isAdmin"`
 	IsModerator                     bool      `json:"isModerator"`
 	IsBot                           bool      `json:"isBot"`
@@ -22,16 +22,16 @@ type MyAccount struct {
 	CreatedAt                       time.Time `json:"createdAt"`
 	UpdatedAt                       time.Time `json:"updatedAt"`
 	LastFetchedAt                   time.Time `json:"lastFetchedAt"`
-	BannerUrl                       string    `json:"bannerUrl"`
-	BannerBlurhash                  string    `json:"bannerBlurhash"`
-	BannerColor                     string    `json:"bannerColor"`
+	BannerUrl                       string    `json:"bannerUrl,omitempty"`
+	BannerBlurhash                  string    `json:"bannerBlurhash,omitempty"`
+	BannerColor                     string    `json:"bannerColor,omitempty"`
 	IsLocked                        bool      `json:"isLocked"`
 	IsSilenced                      bool      `json:"isSilenced"`
 	IsSuspended                     bool      `json:"isSuspended"`
 	Description                     string    `json:"description"`
-	Location                        string    `json:"location"`
-	Birthday                        string    `json:"birthday"`
-	Lang                            string    `json:"lang"`
+	Location                        string    `json:"location,omitempty"`
+	Birthday                        string    `json:"birthday,omitempty"`
+	Lang                            string    `json:"lang,omitempty"`
 	Fields                          []string  `json:"fields"`
 	FollowersCount                  int       `json:"followersCount"`
 	FollowingCount                  int       `json:"followingCount"`

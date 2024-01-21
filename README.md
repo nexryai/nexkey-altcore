@@ -1,5 +1,5 @@
 # Nexkey
-nexryaiによるMisskey v12フォーク
+nexryaiによるMisskey v12フォークの核実験場
 
 ### motive
  - 中小規模のサーバーに最適化された軽量なMisskey v12のフォークを開発維持すること

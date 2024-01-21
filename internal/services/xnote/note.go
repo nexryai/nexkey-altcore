@@ -108,13 +108,13 @@ func Create(note *entities.Note) error {
 		note.Text = utils.Nyaize(note.Text)
 	}
 
-	engine, err := db.GetEngine()
+	database, err := db.GetGormEngine()
 	if err != nil {
 		return err
 	}
-	sql := engine.Table("note")
+	sql := database.Table("note")
 
-	_, err = sql.Insert(&note)
+	err = sql.Create(&note).Error
 	if err != nil {
 		fmt.Println(err)
 		return err

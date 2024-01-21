@@ -68,20 +68,20 @@ func (param *UserService) FindOneByName(userName string) (*entities.User, error)
 
 // 配列内にあるIDのユーザー情報をidをインデックスとするmapにして返す
 func (param *UserService) FindAllAndMap(userIds []string) (*map[string]entities.User, error) {
-	engine, err := db.GetEngine()
+	database, err := db.GetGormEngine()
 	if err != nil {
 		return nil, err
 	}
 
 	var users []entities.User
 
-	sql := engine.Table("user")
-	sql.In("id", userIds)
+	sql := database.Table("user")
+	sql.Where("id IN (?)", userIds)
 	if param.LocalOnly {
 		sql.Where("host is NULL")
 	}
 
-	if err := sql.Find(&users); err != nil {
+	if err := sql.Find(&users).Error; err != nil {
 		return nil, err
 	}
 

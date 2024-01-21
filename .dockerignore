@@ -6,7 +6,7 @@
 Dockerfile
 build/
 built/
-db/
+internal/db/
 docker-compose.yml
 elasticsearch/
 node_modules/

@@ -1,0 +1,41 @@
+<html>
+	<head>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <style>
+            @font-face {
+                font-family: 'Outfit';
+                src: url("/fonts/Outfit-Regular.ttf");
+            }
+            .error-page {
+                font-family: "Outfit", system-ui;
+                background-color: #f7f7f7;
+            }
+            .contents {
+                margin: 10%;
+                font-size: 20px;
+            }
+            .icon-tabler-zoom-exclamation {
+                vertical-align: -7px;
+                margin-right: 20px;
+            }
+        </style>
+    </head>
+    <body class="error-page">
+        <div class="contents">
+            <h1>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-zoom-exclamation" width="45" height="45" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /><path d="M10 13v.01" /><path d="M10 7v3" /></svg>
+                Internal server error :(
+            </h1>
+            <p>An unexpected error occurred inside the server and could not be recovered.<br></p>
+            <li>
+                If you are a user, please report to the administrator.
+            </li>
+            <li>
+                If you are an administrator, please check the server logs.
+            </li>
+            <li>
+                If administrator(s) thinks it is due to a software bug, open an issue on GitHub.
+            </li>
+        </div>
+	</body>
+</html>

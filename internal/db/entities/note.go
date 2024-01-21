@@ -17,7 +17,7 @@ type Note struct {
 	LocalOnly    bool      `gorm:"column:localOnly"`
 	RepliesCount int       `gorm:"column:repliesCount"`
 	RenoteCount  int       `gorm:"column:renoteCount"`
-	Reactions    []uint8   `gorm:"column:reactions;type:jsonb"`
+	Reactions    []uint8   `gorm:"column:reactions"`
 	Uri          string    `gorm:"column:uri;unique"`
 	Score        int       `gorm:"column:score"`
 	UserHost     string    `gorm:"column:userHost"`

@@ -1,0 +1,54 @@
+<html>
+	<head>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <style>
+            .debug-page {
+                font-family: mono, monospace, system-ui;
+                background-color: #393939;
+                color: #fff;
+            }
+            .contents {
+                margin: 7%;
+                font-size: 20px;
+            }
+            .contents td {
+                padding-right: 15px;
+            }
+            .right-bottom {
+                position: fixed;
+                bottom: 0;
+                right: 0;
+                margin-bottom: 10px; /* 必要に応じて調整 */
+                margin-right: 10px; /* 必要に応じて調整 */
+                text-align: right;
+            }
+        </style>
+    </head>
+    <body class="debug-page">
+        <div class="contents">
+            <h2>
+                DEBUG MENU
+            </h2>
+            <p>INFO<br></p>
+            <table>
+                <tr>
+                    <td>HOST</td>
+                    <td>{{ .Hostname }}</td>
+                </tr>
+                <tr>
+                    <td>URL</td>
+                    <td>{{ .URL }}</td>
+                </tr>
+                <tr>
+                    <td>CLIENT_URL</td>
+                    <td>{{ .ClientPath }}</td>
+                </tr>
+                <tr>
+                    <td>CLIENT_INIT_SCRIPT_PATH</td>
+                    <td>{{ .InitScript }}</td>
+                </tr>
+            </table>
+        </div>
+        <p class="right-bottom"><span style="font-size: 14px">nexkey altcore (golang backend) v0.01 </span><br> <span style="color: red">DO NOT USE IN PRODUCTION!</span></p>
+	</body>
+</html>

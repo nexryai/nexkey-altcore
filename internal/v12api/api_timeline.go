@@ -71,7 +71,11 @@ func GetHomeTimeline(ctx *fiber.Ctx) error {
 	for _, n := range *notes {
 		u := n.User
 
-		avatarUrl := n.User.Avatar.URL
+		if u.Avatar == nil {
+			u.Avatar = &entities.DriveFile{}
+		}
+
+		avatarUrl := u.Avatar.URL
 		if n.User.Host == "" {
 			avatarUrl = n.User.Avatar.Thumbnail
 		} else if avatarUrl == "" {

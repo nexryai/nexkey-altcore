@@ -9,11 +9,11 @@ type Note struct {
 	Visibility   string    `gorm:"column:visibility"`
 	Text         string    `gorm:"column:text"`
 	CreatedAt    time.Time `gorm:"column:createdAt"`
-	ReplyId      string    `gorm:"column:replyId"`
+	ReplyId      string    `gorm:"column:replyId;default:null"`
 	Reply        *Note     `gorm:"foreignkey:Id;references:ReplyId"`
-	RenoteId     *string   `gorm:"column:renoteId"`
+	RenoteId     string    `gorm:"column:renoteId;default:null"`
 	Renote       *Note     `gorm:"foreignkey:Id;references:RenoteId"`
-	Cw           string    `gorm:"column:cw"`
+	Cw           string    `gorm:"column:cw;default:null"`
 	LocalOnly    bool      `gorm:"column:localOnly"`
 	RepliesCount int       `gorm:"column:repliesCount"`
 	RenoteCount  int       `gorm:"column:renoteCount"`
@@ -23,6 +23,6 @@ type Note struct {
 	UserHost string `gorm:"column:userHost"`
 }
 
-func (Note) TableName() string {
+func (*Note) TableName() string {
 	return "note"
 }

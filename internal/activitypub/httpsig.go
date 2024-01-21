@@ -11,8 +11,6 @@ import (
 	"io"
 	"lab.sda1.net/nexryai/altcore/internal/core/logger"
 	"lab.sda1.net/nexryai/altcore/internal/core/system"
-	"lab.sda1.net/nexryai/altcore/internal/services/xaccount"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -36,13 +34,6 @@ var (
 	getHeaders  = []string{httpsig.RequestTarget, "host", "date"}
 	postHeaders = []string{httpsig.RequestTarget, "host", "date", "digest"}
 )
-
-type SignatureService struct {
-	PrivateKeyPem string
-	PublicKeyPem  string
-	KeyId         string
-	Request       *http.Request
-}
 
 func pemStringToPrivateKey(pemStr string) (crypto.PrivateKey, error) {
 	block, _ := pem.Decode([]byte(pemStr))
@@ -84,6 +75,13 @@ func pemStringToPublicKey(pemStr string) (crypto.PublicKey, error) {
 	}
 
 	return pubKey, nil
+}
+
+type SignatureService struct {
+	PrivateKeyPem string
+	PublicKeyPem  string
+	KeyId         string
+	Request       *http.Request
 }
 
 func (params *SignatureService) Sign() error {
@@ -199,128 +197,4 @@ func (params *ActivityPubRequestService) ToHttpRequest() *http.Request {
 	req.Header.Set("Content-Type", "application/json")
 
 	return req
-}
-
-func DebugPost() {
-	// 鍵を持ってくる
-	keyringService := xaccount.KeyringService{
-		UserId: "9js2v4nmt6",
-	}
-
-	privateKey, err := keyringService.GetPrivateKeyPem()
-	if err != nil {
-		panic(err)
-	}
-
-	publicKey, err := keyringService.GetLocalPublicKeyPem()
-	if err != nil {
-		panic(err)
-	}
-
-	// ActivityPubRequestを作る
-	activity := CreateActivity{
-		Published: time.Now(),
-	}
-
-	apRequestService := &ActivityPubRequestService{
-		Headers: []Header{{Name: "Host", Value: "nullnyat.house"}},
-		Body:    activity,
-		Method:  "POST",
-	}
-
-	// ActivityPubRequestを普通のrequestに変換する
-	httpRequest := apRequestService.ToHttpRequest()
-
-	// 署名のための情報
-	signService := SignatureService{
-		PrivateKeyPem: privateKey,
-		PublicKeyPem:  publicKey,
-		KeyId:         "https://nyan.sda1.net/users/9js2v4nmt6#main-key",
-		Request:       httpRequest,
-	}
-
-	// httpRequestに署名する
-	err = signService.Sign()
-	if err != nil {
-		panic(err)
-	}
-
-	// 検証する
-	if !signService.Verify() {
-		panic("Invalid")
-	}
-
-	fmt.Println("Signed Headers:")
-	for name, header := range httpRequest.Header {
-		fmt.Printf("%s: %s\n", name, header)
-	}
-}
-
-func Debug() {
-	// 鍵を持ってくる
-	keyringService := xaccount.KeyringService{
-		UserId: "9js2v4nmt6",
-	}
-
-	privateKey, err := keyringService.GetPrivateKeyPem()
-	if err != nil {
-		panic(err)
-	}
-
-	publicKey, err := keyringService.GetLocalPublicKeyPem()
-	if err != nil {
-		panic(err)
-	}
-
-	// ActivityPubRequestを作る
-	apRequestService := &ActivityPubRequestService{
-		Headers: []Header{{Name: "Host", Value: "nullnyat.house"}},
-		Method:  "GET",
-	}
-
-	// ActivityPubRequestを普通のrequestに変換する
-	httpRequest := apRequestService.ToHttpRequest()
-
-	// 署名のための情報
-	signService := SignatureService{
-		PrivateKeyPem: privateKey,
-		PublicKeyPem:  publicKey,
-		KeyId:         "https://nyan.sda1.net/users/9js2v4nmt6#main-key",
-		Request:       httpRequest,
-	}
-
-	// httpRequestに署名する
-	err = signService.Sign()
-	if err != nil {
-		panic(err)
-	}
-
-	// 検証する
-	if !signService.Verify() {
-		panic("Invalid")
-	}
-
-	// 実行
-	client := &http.Client{}
-
-	fmt.Println("Signed Headers:")
-	for name, header := range httpRequest.Header {
-		fmt.Printf("%s: %s\n", name, header)
-	}
-
-	response, err := client.Do(httpRequest)
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-
-	defer response.Body.Close()
-
-	b, err := io.ReadAll(response.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	fmt.Println("Response:", response.Status)
-	fmt.Println("ResponseBody:", string(b))
 }

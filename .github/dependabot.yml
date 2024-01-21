@@ -5,7 +5,7 @@ updates:
   target-branch: "devel"
   schedule:
     interval: daily
-- package-ecosystem: npm
+- package-ecosystem: gomod
   directory: "/packages/backend"
   target-branch: "devel"
   schedule:

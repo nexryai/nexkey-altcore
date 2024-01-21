@@ -99,10 +99,10 @@ func GetHomeTimeline(ctx *fiber.Ctx) error {
 				IsCat:          u.IsCat,
 			},
 			CreatedAt: n.CreatedAt,
-			Reactions: n.Reactions,
-			FileIds:   []string{},
-			Files:     []string{},
-			Cw:        n.Cw,
+			//Reactions: n.Reactions,
+			FileIds: []string{},
+			Files:   []string{},
+			Cw:      n.Cw,
 		}
 
 		if n.Reply != nil {
@@ -117,9 +117,9 @@ func GetHomeTimeline(ctx *fiber.Ctx) error {
 				Text:       replyTarget.Text,
 				CreatedAt:  replyTarget.CreatedAt,
 				LocalOnly:  replyTarget.LocalOnly,
-				Reactions:  replyTarget.Reactions,
-				Uri:        replyTarget.Uri,
-				Cw:         replyTarget.Cw,
+				//Reactions:  replyTarget.Reactions,
+				Uri: replyTarget.Uri,
+				Cw:  replyTarget.Cw,
 				User: schema.User{
 					Id:             replyTargetUser.Id,
 					Name:           replyTargetUser.Name,

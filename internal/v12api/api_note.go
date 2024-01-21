@@ -45,9 +45,9 @@ func ShowNote(ctx *fiber.Ctx) error {
 		Text:       note.Text,
 		CreatedAt:  note.CreatedAt,
 		LocalOnly:  note.LocalOnly,
-		Reactions:  note.Reactions,
-		Uri:        note.Uri,
-		Cw:         note.Cw,
+		//Reactions:  note.Reactions,
+		Uri: note.Uri,
+		Cw:  note.Cw,
 	}
 
 	return ctx.JSON(resp)
@@ -68,9 +68,9 @@ func CreateNote(ctx *fiber.Ctx) error {
 		Text:       req.Text,
 		CreatedAt:  time.Now(),
 		LocalOnly:  true,
-		Reactions:  []uint8{},
-		UserHost:   "",
-		Uri:        fmt.Sprintf("%s/notes/%s", config.URL, noteId),
+		//Reactions:  []uint8{},
+		UserHost: "",
+		Uri:      fmt.Sprintf("%s/notes/%s", config.URL, noteId),
 	}
 
 	// リプライ

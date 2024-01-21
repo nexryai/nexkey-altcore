@@ -25,10 +25,6 @@ async function copyClientLocales() {
     }
 }
 
-async function copyBackendViews() {
-    await fs.cp("./packages/backend/src/server/web/views", "./packages/backend/built/server/web/views", { recursive: true });
-}
-
 async function buildBackendScript() {
     await fs.mkdir("./packages/backend/built/server/web", { recursive: true });
 
@@ -63,7 +59,6 @@ async function build() {
         copyClientFonts(),
         copyClientTablerIcons(),
         copyClientLocales(),
-        copyBackendViews(),
         buildBackendScript(),
         buildBackendStyle(),
     ]);

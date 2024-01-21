@@ -14,13 +14,11 @@
 		"postinstall": "node scripts/install-packages.mjs",
 		"build-assets": "node ./scripts/build-client-assets.mjs",
 		"build": "go build -ldflags=\"-s -w\" -trimpath -o altcore main.go && node scripts/build.mjs",
-		"start": "cd packages/backend && node --experimental-json-modules ./built/index.js",
-		"start:test": "cd packages/backend && cross-env NODE_ENV=test node --experimental-json-modules ./built/index.js",
-		"altstart": "./altcore",
+		"start": "./altcore",
         "altdebug": "go run main.go",
         "init": "npm run migrate",
 		"migrate": "cd packages/backend && npx typeorm migration:run -d ormconfig.js",
-		"migrateandstart": "npm run migrate && npm run start",
+		"migrateandstart": "npm run migrate && ./altcore",
 		"watch": "npm run dev",
 		"dev": "node scripts/dev.mjs",
 		"lint": "node scripts/lint.mjs",
@@ -38,8 +36,8 @@
 		"execa": "8.0.1",
 		"js-yaml": "4.1.0",
 		"postcss": "^8.4.33",
-		"sonic-channel": "1.3.1",
-		"terser": "5.27.0"
+		"terser": "5.27.0",
+		"typeorm": "0.3.17"
 	},
 	"devDependencies": {
 		"@types/gulp": "4.0.17",

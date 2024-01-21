@@ -6,14 +6,6 @@ import { dirname } from "node:path";
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
 
-    console.log("installing dependencies of packages/backend ...");
-
-    await execa("yarn", ["--force", "install"], {
-        cwd: __dirname + "/../packages/backend",
-        stdout: process.stdout,
-        stderr: process.stderr,
-    });
-
     console.log("installing dependencies of packages/client ...");
 
     await execa("yarn", ["install"], {

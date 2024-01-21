@@ -16,14 +16,9 @@ import (
 	"lab.sda1.net/nexryai/altcore/internal/services/baselib"
 )
 
-type NoteService struct {
-	UserId                            string
-	RequesterUserIdForVisibilityCheck string
-}
-
-func (params *NoteService) addToDeliverQueue(note *entities.Note) error {
+func addToDeliverQueue(note *entities.Note) error {
 	followService := baselib.FollowService{
-		UserId: params.UserId,
+		UserId: note.UserId,
 		Type:   enum.Followers,
 	}
 	followers, err := followService.FindAll()
@@ -41,7 +36,7 @@ func (params *NoteService) addToDeliverQueue(note *entities.Note) error {
 
 	logger.Warn(fmt.Sprintf("%s", inboxes))
 
-	actorUrl := fmt.Sprintf("%s/users/%s", config.URL, params.UserId)
+	actorUrl := fmt.Sprintf("%s/users/%s", config.URL, note.UserId)
 	id := fmt.Sprintf("%s/notes/%s/activity", config.URL, note.Id)
 
 	for _, inbox := range inboxes {
@@ -74,7 +69,7 @@ func (params *NoteService) addToDeliverQueue(note *entities.Note) error {
 		}
 
 		err := services.AddCreateActivityToDeliverQueue(queue.DeliverJob{
-			UserId:         params.UserId,
+			UserId:         note.UserId,
 			TargetInbox:    inbox,
 			CreateActivity: activity,
 		})
@@ -87,14 +82,12 @@ func (params *NoteService) addToDeliverQueue(note *entities.Note) error {
 	return nil
 }
 
-func (params *NoteService) Create(note *entities.Note) error {
-	params.UserId = note.UserId
-
+func Create(note *entities.Note) error {
 	userService := baselib.UserService{
 		LocalOnly: false,
 	}
 
-	author, err := userService.FindOne(params.UserId)
+	author, err := userService.FindOne(note.UserId)
 	if err != nil {
 		return err
 	}
@@ -127,7 +120,7 @@ func (params *NoteService) Create(note *entities.Note) error {
 		return err
 	}
 
-	err = params.addToDeliverQueue(note)
+	err = addToDeliverQueue(note)
 	if err != nil {
 		logger.ErrorWithDetail("Failed to add job", err)
 		return err
@@ -136,7 +129,7 @@ func (params *NoteService) Create(note *entities.Note) error {
 	return nil
 }
 
-func (params *NoteService) FindOne(id string) (*entities.Note, error) {
+func FindOne(id string) (*entities.Note, error) {
 	var result entities.Note
 	cacheKey := "note/" + id
 
@@ -162,20 +155,10 @@ func (params *NoteService) FindOne(id string) (*entities.Note, error) {
 		kv.StoreKvCache(cacheKey, result)
 	}
 
-	// ここでvisibilityチェック
-	if params.RequesterUserIdForVisibilityCheck != "" {
-		followService := baselib.FollowService{
-			UserId: params.RequesterUserIdForVisibilityCheck,
-		}
-		if !followService.CheckVisibility(enum.NoteVisibility(result.Visibility), params.UserId) {
-			return &entities.Note{}, system.NoteNotFound
-		}
-	}
-
 	return &result, nil
 }
 
-func (params *NoteService) FindAllAndMap(noteIds []string) (*map[string]entities.Note, error) {
+func FindAllAndMap(noteIds []string) (*map[string]entities.Note, error) {
 	if len(noteIds) == 0 {
 		panic(system.InvalidParamsOnServiceCall)
 	}
@@ -210,7 +193,7 @@ func (params *NoteService) FindAllAndMap(noteIds []string) (*map[string]entities
 	return &result, nil
 }
 
-func (params *NoteService) IsExists(id string) (bool, error) {
+func IsExists(id string) (bool, error) {
 	var result entities.Note
 
 	engine, err := db.GetEngine()
@@ -229,20 +212,10 @@ func (params *NoteService) IsExists(id string) (bool, error) {
 		return false, nil
 	}
 
-	// ここでvisibilityチェック
-	if params.RequesterUserIdForVisibilityCheck != "" {
-		followService := baselib.FollowService{
-			UserId: params.RequesterUserIdForVisibilityCheck,
-		}
-		if !followService.CheckVisibility(enum.NoteVisibility(result.Visibility), params.UserId) {
-			return false, nil
-		}
-	}
-
 	return true, nil
 }
 
-func (params *NoteService) Delete() error {
+func Delete() error {
 	// ToDo
 	return nil
 }

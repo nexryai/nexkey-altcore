@@ -52,7 +52,7 @@ func MkClientRouter(app *fiber.App, manifest ClientManifest) {
 	app.Static("/assets/tabler-icons", "built/_client_dist_/tabler-icons")
 	app.Static("/assets/tabler-icons/fonts", "built/_client_dist_/tabler-icons/fonts")
 	app.Static("/twemoji", "packages/client/node_modules/@discordapp/twemoji/dist")
-	app.Static("/", "server/static")
+	app.Static("/", "assets")
 
 	app.Get("/proxy/*", func(ctx *fiber.Ctx) error {
 		url := ctx.Query("url")

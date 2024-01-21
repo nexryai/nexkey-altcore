@@ -9,7 +9,7 @@ import (
 	"lab.sda1.net/nexryai/altcore/internal/core/logger"
 	"lab.sda1.net/nexryai/altcore/internal/core/system"
 	"lab.sda1.net/nexryai/altcore/internal/db/entities"
-	"lab.sda1.net/nexryai/altcore/internal/services/xnote"
+	noteService "lab.sda1.net/nexryai/altcore/internal/services/xnote"
 	"lab.sda1.net/nexryai/altcore/internal/v12api/schema"
 	"time"
 )
@@ -29,10 +29,6 @@ func ShowNote(ctx *fiber.Ctx) error {
 	}
 
 	parseRequest(ctx, &req)
-
-	noteService := xnote.NoteService{
-		RequesterUserIdForVisibilityCheck: req.UserId,
-	}
 
 	note, err := noteService.FindOne(req.NoteId)
 	if errors.Is(err, system.NoteNotFound) {
@@ -79,7 +75,6 @@ func CreateNote(ctx *fiber.Ctx) error {
 
 	// リプライ
 	if req.ReplyId != "" {
-		noteService := xnote.NoteService{}
 		exists, err := noteService.IsExists(req.ReplyId)
 		if err != nil {
 			return ctx.SendStatus(500)
@@ -91,9 +86,6 @@ func CreateNote(ctx *fiber.Ctx) error {
 		note.ReplyId = req.ReplyId
 	}
 
-	noteService := xnote.NoteService{
-		UserId: req.UserId,
-	}
 	err := noteService.Create(note)
 	if err != nil {
 		panic(err)

@@ -26,7 +26,6 @@ coverage
 built
 /data
 /.cache-loader
-/internal/db
 /elasticsearch
 npm-debug.log
 *.pem

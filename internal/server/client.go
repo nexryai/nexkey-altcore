@@ -36,12 +36,12 @@ func GetClientManifest() *ClientManifest {
 }
 
 func MkClientRouter(app *fiber.App, manifest ClientManifest) {
-	bootJS, err := os.ReadFile("internal/server/client-loader/boot.js")
+	bootJS, err := os.ReadFile("packages/backend/built/server/web/boot.js")
 	if err != nil {
 		panic(err)
 	}
 
-	styleCSS, err := os.ReadFile("internal/server/client-loader/style.css")
+	styleCSS, err := os.ReadFile("packages/backend/built/server/web/style.css")
 	if err != nil {
 		panic(err)
 	}

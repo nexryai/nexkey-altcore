@@ -37,7 +37,7 @@
 		"js-yaml": "4.1.0",
 		"postcss": "^8.4.33",
 		"terser": "5.27.0",
-		"typeorm": "0.3.17"
+		"typeorm": "0.3.19"
 	},
 	"devDependencies": {
 		"@types/gulp": "4.0.17",

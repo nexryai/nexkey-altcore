@@ -3,8 +3,8 @@ name: Unit Test (Go)
 on:
   pull_request:
     types:
-        - opened
-        - synchronize
+      - opened
+      - synchronize
   push:
     branches:
       - "**"

@@ -1,0 +1,28 @@
+name: Check License
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  push:
+    branches:
+      - "**"
+
+jobs:
+  test:
+    name: Run LicenseFinder
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+
+      - name: Install LicenseFinder
+        run: gem install license_finder
+
+      - name: Run LicenseFinder
+        run: license_finder --decisions_file ./dependency_decisions.yml

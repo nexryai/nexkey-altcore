@@ -100,13 +100,13 @@ func (param *UserService) FindAllAndMap(userIds []string) (*map[string]entities.
 
 	var users []entities.User
 
-	sql := database.Table("user")
-	sql.Where("id IN (?)", userIds)
+	query := database.Table("user")
+	query.Where("id IN (?)", userIds)
 	if param.LocalOnly {
-		sql.Where("host is NULL")
+		query.Where("host is NULL")
 	}
 
-	if err := sql.Find(&users).Error; err != nil {
+	if err := query.Find(&users).Error; err != nil {
 		return nil, err
 	}
 
@@ -119,17 +119,17 @@ func (param *UserService) FindAllAndMap(userIds []string) (*map[string]entities.
 }
 
 func (param *UserService) GetProfile(userId string) (entities.UserProfile, error) {
-	engine, err := db.GetEngine()
+	database, err := db.GetGormEngine()
 	if err != nil {
 		return entities.UserProfile{}, err
 	}
 
 	var result entities.UserProfile
 
-	sql := engine.Table("user_profile")
-	sql.Where("\"userId\" = ?", userId)
+	query := database.Table("user_profile")
+	query.Where("\"userId\" = ?", userId)
 
-	_, err = sql.Get(&result)
+	err = query.First(&result).Error
 	if err != nil {
 		return result, err
 	}

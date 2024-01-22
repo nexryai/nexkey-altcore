@@ -39,7 +39,6 @@ type User struct {
 	LastActiveDate          time.Time      `gorm:"column:lastActiveDate"`
 	HideOnlineStatus        bool           `gorm:"column:hideOnlineStatus"`
 	IsDeleted               bool           `gorm:"column:isDeleted"`
-	ShowTimelineReplies     bool           `gorm:"column:showTimelineReplies"`
 	DriveCapacityOverrideMb string         `gorm:"column:driveCapacityOverrideMb"`
 	Token                   string         `gorm:"token"`
 }
@@ -49,8 +48,8 @@ func (User) TableName() string {
 }
 
 type UserProfileFields struct {
-	Name  string `xorm:"name" json:"name"`
-	Value string `xorm:"value" json:"value"`
+	Name  string `gorm:"column:name" json:"name"`
+	Value string `gorm:"column:value" json:"value"`
 }
 
 type UserProfileMutedWord struct {
@@ -59,35 +58,31 @@ type UserProfileMutedWord struct {
 type UserProfileMutedInstance struct {
 }
 
-// ToDo: なんでUserとUserProfileが別テーブルに分かれてるか謎なのでもし理由がないようならそのうち統合する
-// or プロフィールとかをuserテーブルに移してリモートユーザーには関係ないカラムのみ残してlocal_userテーブルとかに改名？
+// ToDo: リモートユーザーには関係ないカラムをどこか別テーブルに移す
 type UserProfile struct {
-	Id                  string              `xorm:"userId"`
-	Location            string              `xorm:"location"`
-	Birthday            time.Time           `xorm:"birthday"`
-	Description         string              `xorm:"description"`
-	Fields              []UserProfileFields `xorm:"fields"`
-	Url                 string              `xorm:"url"`
-	Email               string              `xorm:"email"`
-	EmailVerifyCode     string              `xorm:"emailVerifyCode"`
-	TwoFactorTempSecret string              `xorm:"twoFactorTempSecret"`
-	TwoFactorSecret     string              `xorm:"twoFactorSecret"`
-	TwoFactorEnabled    bool                `xorm:"twoFactorEnabled"`
-	PasswordHash        string              `xorm:"password"`
-	AutoAcceptFollowed  bool                `xorm:"autoAcceptFollowed"`
-	AlwaysMarkNsfw      bool                `xorm:"alwaysMarkNsfw"`
-	CarefulBot          bool                `xorm:"carefulBot"`
-	UserHost            string              `xorm:"userHost"`
-	EnableWordMute      bool                `xorm:"enableWordMute"`
-	//MutedWords               pq.StringArray      `xorm:"mutedWords jsonb"`
-	NoCrawle                 bool           `xorm:"noCrawle"`
-	ReceiveAnnouncementEmail bool           `xorm:"receiveAnnouncementEmail"`
-	EmailNotificationTypes   pq.StringArray `xorm:"emailNotificationTypes jsonb"`
-	MutedInstances           pq.StringArray `xorm:"mutedInstances jsonb"`
-	PublicReactions          bool           `xorm:"publicReactions"`
-	FfVisibility             string         `xorm:"ffVisibility"`
-	ModerationNote           string         `xorm:"moderationNote"`
-	//TwoFactorBackupSecret    string              `xorm:"twoFactorBackupSecret"`
+	Id                    string         `gorm:"column:userId;primaryKey"`
+	Location              string         `gorm:"column:location;default:null"`
+	Birthday              time.Time      `gorm:"column:birthday;default:null"`
+	Description           string         `gorm:"column:description;default:null"`
+	Url                   string         `gorm:"column:url"`
+	Email                 string         `gorm:"column:email;default:null"`
+	EmailVerifyCode       string         `gorm:"column:emailVerifyCode;default:null"`
+	TwoFactorTempSecret   string         `gorm:"column:twoFactorTempSecret;default:null"`
+	TwoFactorSecret       string         `gorm:"column:twoFactorSecret;default:null"`
+	TwoFactorEnabled      bool           `gorm:"column:twoFactorEnabled"`
+	PasswordHash          string         `gorm:"column:password;default:null"`
+	AutoAcceptFollowed    bool           `gorm:"column:autoAcceptFollowed"`
+	AlwaysMarkNsfw        bool           `gorm:"column:alwaysMarkNsfw"`
+	CarefulBot            bool           `gorm:"column:carefulBot"`
+	UserHost              string         `gorm:"column:userHost;default:null"`
+	EnableWordMute        bool           `gorm:"column:enableWordMute"`
+	MutedWords            pq.StringArray `gorm:"column:mutedWords;type:text[]"`
+	NoCrawl               bool           `gorm:"column:noCrawl"`
+	MutedInstances        pq.StringArray `gorm:"column:mutedInstances;type:text[]"`
+	FfVisibility          string         `gorm:"column:ffVisibility"`
+	ModerationNote        string         `gorm:"column:moderationNote;default:null"`
+	TwoFactorBackupSecret string         `gorm:"column:twoFactorBackupSecret;default:null"`
+	// Fields                   []UserProfileFields `gorm:"column:fields;type:jsonb;default:'[]';not null"`
 }
 
 type Following struct {

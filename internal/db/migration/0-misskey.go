@@ -5880,4 +5880,6 @@ var migrationsToInitMisskey = migrator.Migrations(
 			if _, err := tx.Exec("ALTER TABLE \"note\" ADD \"updatedAt\" TIMESTAMP WITH TIME ZONE"); err != nil {
 				return err
 			}
+
+			return nil
 		}})

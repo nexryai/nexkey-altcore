@@ -48,6 +48,7 @@ type Hashtag struct {
 	Name string `json:"name"`
 }
 
+// ToDo: rename to "Actor"
 type Person struct {
 	Context                   []interface{}   `json:"@context"`
 	Type                      string          `json:"type"`

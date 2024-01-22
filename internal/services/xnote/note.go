@@ -12,7 +12,7 @@ import (
 	"lab.sda1.net/nexryai/altcore/internal/db/entities"
 	"lab.sda1.net/nexryai/altcore/internal/db/kv"
 	"lab.sda1.net/nexryai/altcore/internal/queue"
-	"lab.sda1.net/nexryai/altcore/internal/services"
+	queueClientService "lab.sda1.net/nexryai/altcore/internal/queue/client"
 	"lab.sda1.net/nexryai/altcore/internal/services/baselib"
 )
 
@@ -68,7 +68,7 @@ func addToDeliverQueue(note *entities.Note) error {
 			},
 		}
 
-		err := services.AddCreateActivityToDeliverQueue(queue.DeliverJob{
+		err := queueClientService.AddCreateActivityToDeliverQueue(queue.DeliverJob{
 			UserId:         note.UserId,
 			TargetInbox:    inbox,
 			CreateActivity: activity,

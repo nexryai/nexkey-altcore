@@ -1,0 +1,5 @@
+package resolve
+
+func ProcessInbox() {
+
+}

@@ -1,7 +1,8 @@
-package activitypub
+package deliver
 
 import (
 	"fmt"
+	"lab.sda1.net/nexryai/altcore/internal/activitypub"
 	"lab.sda1.net/nexryai/altcore/internal/core/config"
 	"lab.sda1.net/nexryai/altcore/internal/core/logger"
 	"lab.sda1.net/nexryai/altcore/internal/core/security"
@@ -16,14 +17,14 @@ type ActivityPubDeliverService struct {
 	UserId      string
 }
 
-func (params *ActivityPubDeliverService) DeliverCreateActivity(activity *CreateActivity) error {
+func (params *ActivityPubDeliverService) DeliverCreateActivity(activity *activitypub.CreateActivity) error {
 	// SafeURLじゃないなら拒否
 	if !security.IsSafeUrl(params.TargetInbox) {
 		logger.Warn("discard this job (reason: !IsSafeUrl)")
 		return nil
 	}
 
-	activity.Context = activityContext
+	activity.Context = activitypub.ActivityContext
 	activity.ActivityType = "Create"
 
 	keyringService := xaccount.KeyringService{
@@ -35,9 +36,9 @@ func (params *ActivityPubDeliverService) DeliverCreateActivity(activity *CreateA
 		return err
 	}
 
-	apRequestService := &ActivityPubRequestService{
+	apRequestService := &activitypub.ActivityPubRequestService{
 		Url:     params.TargetInbox,
-		Headers: []Header{{Name: "Host", Value: utils.GetHostFromUrl(params.TargetInbox)}},
+		Headers: []activitypub.Header{{Name: "Host", Value: utils.GetHostFromUrl(params.TargetInbox)}},
 		Body:    activity,
 		Method:  "POST",
 	}
@@ -45,7 +46,7 @@ func (params *ActivityPubDeliverService) DeliverCreateActivity(activity *CreateA
 	httpRequest := apRequestService.ToHttpRequest()
 
 	// 署名のための情報
-	signService := SignatureService{
+	signService := activitypub.SignatureService{
 		PrivateKeyPem: privateKey,
 		KeyId:         fmt.Sprintf("%s/users/%s", config.URL, params.UserId),
 		Request:       httpRequest,

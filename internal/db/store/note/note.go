@@ -1,25 +1,23 @@
-package store
+package note
 
 import (
 	"lab.sda1.net/nexryai/altcore/internal/db/entities"
 	"time"
 )
 
-type NoteStore struct{}
-
-func (store *NoteStore) Create(note *entities.Note) error {
+func Create(note *entities.Note) error {
 	return nil
 }
 
-func (store *NoteStore) Delete() {
+func Delete() {
 
 }
 
-func (store *NoteStore) FindOne() {
+func FindOne() {
 
 }
 
-func (store *NoteStore) FindMany(args struct {
+func FindMany(args struct {
 	UserIds   []string
 	UntilDate time.Time
 	Limit     uint

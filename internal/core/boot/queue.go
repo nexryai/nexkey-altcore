@@ -29,6 +29,7 @@ func QueueProcessDaemon() {
 	// mux maps a type to a handler
 	mux := asynq.NewServeMux()
 	mux.HandleFunc(queue.TypeDeliverJob, queue.HandleDeliverQueue)
+	mux.HandleFunc(queue.TypeFollowActivityInboxJob, queue.HandleFollowActivityInboxQueue)
 	// ...register other handlers...
 
 	if err := srv.Run(mux); err != nil {

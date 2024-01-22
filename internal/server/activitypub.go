@@ -7,6 +7,8 @@ import (
 	"github.com/valyala/fasthttp/fasthttpadaptor"
 	"lab.sda1.net/nexryai/altcore/internal/activitypub"
 	"lab.sda1.net/nexryai/altcore/internal/core/logger"
+	"lab.sda1.net/nexryai/altcore/internal/queue"
+	queueClientService "lab.sda1.net/nexryai/altcore/internal/queue/client"
 	"lab.sda1.net/nexryai/altcore/internal/server/middleware"
 	"net/http"
 	"regexp"
@@ -105,9 +107,12 @@ func inbox(ctx *fiber.Ctx) error {
 			return ctx.SendStatus(400)
 		}
 
-		err = activitypub.ProcessFollowActivity(activity)
+		err = queueClientService.AddToFollowActivityInboxQueue(queue.ProcessFollowActivityJob{
+			Activity: activity,
+			Request:  request,
+		})
 		if err != nil {
-			logger.ErrorWithDetail("failed to process activity", err)
+			logger.ErrorWithDetail("failed to enqueue activity", err)
 			return ctx.SendStatus(500)
 		}
 

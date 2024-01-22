@@ -2,7 +2,7 @@ package activitypub
 
 import "time"
 
-var activityContext = &[]interface{}{
+var ActivityContext = &[]interface{}{
 	"https://www.w3.org/ns/activitystreams",
 	"https://w3id.org/security/v1",
 	map[string]string{

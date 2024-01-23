@@ -4305,9 +4305,6 @@ var migrationsToInitMisskey = migrator.Migrations(
 			if _, err := tx.Exec("SELECT \"userId\", \"mutedWords\" FROM \"user_profile\" WHERE \"userHost\" IS NULL"); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("/${regexp[1]}/${regexp[2]}"); err != nil {
-				return err
-			}
 			if _, err := tx.Exec("UPDATE \"__chart__federation\" SET \"___instance_total\"=2147483647 WHERE \"___instance_total\" > 2147483647"); err != nil {
 				return err
 			}

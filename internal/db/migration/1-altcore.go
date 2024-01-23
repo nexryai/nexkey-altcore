@@ -9,9 +9,7 @@ var migrationsToAltcore = migrator.Migrations(
 	&migrator.Migration{
 		Name: "Drop channel",
 		Func: func(tx *sql.Tx) error {
-			if _, err := tx.Exec("DROP INDEX \"IDX_note_on_channelId_and_id_desc\""); err != nil {
-				return err
-			}
+
 			if _, err := tx.Exec("DROP INDEX \"IDX_6a57f051d82c6d4036c141e107\""); err != nil {
 				return err
 			}
@@ -54,7 +52,7 @@ var migrationsToAltcore = migrator.Migrations(
 			if _, err := tx.Exec("ALTER TABLE \"channel\" DROP CONSTRAINT \"FK_999da2bcc7efadbfe0e92d3bc19\""); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("DALTER TABLE \"channel\" DROP CONSTRAINT \"FK_823bae55bd81b3be6e05cff4383\""); err != nil {
+			if _, err := tx.Exec("ALTER TABLE \"channel\" DROP CONSTRAINT \"FK_823bae55bd81b3be6e05cff4383\""); err != nil {
 				return err
 			}
 			if _, err := tx.Exec("ALTER TABLE \"note\" DROP COLUMN \"channelId\""); err != nil {
@@ -172,7 +170,7 @@ var migrationsToAltcore = migrator.Migrations(
 			if _, err := tx.Exec("DROP TABLE \"reversi_matching\""); err != nil {
 				return err
 			}
-			if _, err := tx.Exec("CDROP TABLE \"reversi_game\""); err != nil {
+			if _, err := tx.Exec("DROP TABLE \"reversi_game\""); err != nil {
 				return err
 			}
 			return nil

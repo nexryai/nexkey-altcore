@@ -9,15 +9,17 @@ require (
 	github.com/gofiber/template/html/v2 v2.1.0
 	github.com/golang-jwt/jwt/v5 v5.2.0
 	github.com/hibiken/asynq v0.24.1
+	github.com/jackc/pgx/v4 v4.18.1
 	github.com/judwhite/argon2 v0.0.0-20190925123640-b53743de020b
 	github.com/lib/pq v1.10.9
+	github.com/lopezator/migrator v0.3.1
 	github.com/nexryai/visualog v0.0.1
 	github.com/redis/go-redis/v9 v9.3.0
 	github.com/valyala/fasthttp v1.51.0
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/postgres v1.5.4
 	gorm.io/gorm v1.25.5
-	xorm.io/xorm v1.3.4
+	xorm.io/xorm v1.3.7
 )
 
 require (
@@ -39,13 +41,11 @@ require (
 	github.com/jackc/pgproto3/v2 v2.3.2 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/pgtype v1.14.0 // indirect
-	github.com/jackc/pgx/v4 v4.18.1 // indirect
 	github.com/jackc/pgx/v5 v5.4.3 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.17.3 // indirect
-	github.com/lopezator/migrator v0.3.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.15 // indirect

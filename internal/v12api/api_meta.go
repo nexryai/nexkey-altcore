@@ -47,7 +47,6 @@ func GetMeta() *schema.Meta {
 		EnableEmail:         m.EnableEmail,
 		EnableServiceWorker: m.EnableServiceWorker,
 		TranslatorAvailable: m.DeeplAuthKey != "",
-		// ToDo
-		RequireSetup: false,
+		RequireSetup:        instance.ShouldCreateAdminAccount(),
 	}
 }

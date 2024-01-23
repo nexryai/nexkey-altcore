@@ -34,6 +34,34 @@ func ShouldInitDB() bool {
 	return false
 }
 
+func ShouldCreateAdminAccount() bool {
+	database, err := db.GetGormEngine()
+	if err != nil {
+		panic(err)
+	}
+
+	dbInstance, err := database.DB()
+	if err != nil {
+		panic(err)
+	}
+
+	defer func(dbInstance *sql.DB) {
+		err := dbInstance.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(dbInstance)
+
+	// userテーブルにHOSTがNULLのユーザーが存在するか
+	var user entities.User
+	database.Where("host IS NULL").First(&user)
+	if user.Id == "" {
+		return true
+	}
+
+	return false
+}
+
 func GetInstanceMeta() *entities.Meta {
 	var meta entities.Meta
 

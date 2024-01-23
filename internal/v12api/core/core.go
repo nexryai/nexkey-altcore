@@ -1,4 +1,4 @@
-package v12api
+package core
 
 import (
 	"encoding/json"
@@ -12,7 +12,7 @@ var (
 	InvalidParam = errors.New("Invalid param")
 )
 
-func getUserId(ctx *fiber.Ctx) string {
+func GetUserId(ctx *fiber.Ctx) string {
 	user := ctx.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	userId := claims["id"].(string)
@@ -25,7 +25,7 @@ func getUserId(ctx *fiber.Ctx) string {
 	return userId
 }
 
-func parseRequest(ctx *fiber.Ctx, param interface{}) interface{} {
+func ParseRequest(ctx *fiber.Ctx, param interface{}) interface{} {
 	err := json.Unmarshal(ctx.Body(), &param)
 	if err != nil {
 		logger.Debug(err.Error())

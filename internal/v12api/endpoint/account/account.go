@@ -1,4 +1,4 @@
-package v12api
+package account
 
 import (
 	"fmt"
@@ -7,12 +7,13 @@ import (
 	"lab.sda1.net/nexryai/altcore/internal/db"
 	"lab.sda1.net/nexryai/altcore/internal/db/entities"
 	instanceCore "lab.sda1.net/nexryai/altcore/internal/services/baselib"
+	apiCore "lab.sda1.net/nexryai/altcore/internal/v12api/core"
 	"lab.sda1.net/nexryai/altcore/internal/v12api/schema"
 	"strings"
 )
 
 func GetAccountInfo(ctx *fiber.Ctx) error {
-	userId := getUserId(ctx)
+	userId := apiCore.GetUserId(ctx)
 
 	userService := instanceCore.UserService{
 		LocalOnly: true,
@@ -61,7 +62,7 @@ func GetAccountInfo(ctx *fiber.Ctx) error {
 
 func GetRegistry(ctx *fiber.Ctx) error {
 	// ToDo: 全体的にDBが意味不明な設計なのでリファクタリングする
-	userId := getUserId(ctx)
+	userId := apiCore.GetUserId(ctx)
 	var items []entities.UserRegistryItem
 
 	engine, err := db.GetEngine()

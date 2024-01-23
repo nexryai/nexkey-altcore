@@ -1,4 +1,4 @@
-package v12api
+package meta
 
 import (
 	"lab.sda1.net/nexryai/altcore/internal/core/config"

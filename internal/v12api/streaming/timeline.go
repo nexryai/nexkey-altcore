@@ -1,4 +1,4 @@
-package v12api
+package streaming
 
 import (
 	"context"

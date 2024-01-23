@@ -1,4 +1,4 @@
-package v12api
+package note
 
 import (
 	"database/sql"
@@ -8,6 +8,7 @@ import (
 	"lab.sda1.net/nexryai/altcore/internal/db"
 	"lab.sda1.net/nexryai/altcore/internal/db/entities"
 	"lab.sda1.net/nexryai/altcore/internal/services/baselib"
+	apiCore "lab.sda1.net/nexryai/altcore/internal/v12api/core"
 	"lab.sda1.net/nexryai/altcore/internal/v12api/schema"
 	"log"
 )
@@ -21,10 +22,10 @@ type getHomeTimelineParam struct {
 
 func GetHomeTimeline(ctx *fiber.Ctx) error {
 	req := getHomeTimelineParam{
-		UserId: getUserId(ctx),
+		UserId: apiCore.GetUserId(ctx),
 	}
 
-	parseRequest(ctx, &req)
+	apiCore.ParseRequest(ctx, &req)
 
 	followService := baselib.FollowService{
 		Type:   enum.Followees,

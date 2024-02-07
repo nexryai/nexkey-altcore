@@ -2,10 +2,9 @@
 nexryaiによるMisskey v12フォークの核実験場
 
 ### motive
- - 中小規模のサーバーに最適化された軽量なMisskey v12のフォークを開発維持すること
-
-### 変更点
-CHANGELOGを参照してください。
-
-### Thanks
-Thanks to the developers and contributors of the original Misskey and the referenced fork!
+ - 本家nexkeyとは異なり完全にお一人様インスタンスに特化
+ - 中の人の技術習得目的でGoでバックエンドを書き直している
+ - コア機能以外ほぼ全部消す予定
+   * アンテナはたぶん残します
+   * 中の人専用SNSに近い
+ - まだ開発中なので動きません

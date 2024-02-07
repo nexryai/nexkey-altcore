@@ -17,8 +17,8 @@ require (
 	github.com/redis/go-redis/v9 v9.4.0
 	github.com/valyala/fasthttp v1.51.0
 	gopkg.in/yaml.v3 v3.0.1
-	gorm.io/driver/postgres v1.5.4
-	gorm.io/gorm v1.25.6
+	gorm.io/driver/postgres v1.5.6
+	gorm.io/gorm v1.25.7-0.20240204074919-46816ad31dde
 	xorm.io/xorm v1.3.7
 )
 

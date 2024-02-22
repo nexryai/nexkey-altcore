@@ -6,7 +6,7 @@ require (
 	github.com/go-fed/httpsig v1.1.0
 	github.com/gofiber/contrib/websocket v1.3.0
 	github.com/gofiber/fiber/v2 v2.52.1
-	github.com/gofiber/template/html/v2 v2.1.0
+	github.com/gofiber/template/html/v2 v2.1.1
 	github.com/golang-jwt/jwt/v5 v5.2.0
 	github.com/hibiken/asynq v0.24.1
 	github.com/jackc/pgx/v4 v4.18.1
@@ -29,7 +29,7 @@ require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fasthttp/websocket v1.5.7 // indirect
 	github.com/goccy/go-json v0.8.1 // indirect
-	github.com/gofiber/template v1.8.2 // indirect
+	github.com/gofiber/template v1.8.3 // indirect
 	github.com/gofiber/utils v1.1.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect

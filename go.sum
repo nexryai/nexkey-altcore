@@ -389,5 +389,5 @@ modernc.org/token v1.0.1 h1:A3qvTqOwexpfZZeyI0FeGPDlSWX5pjZu9hF4lU+EKWg=
 modernc.org/token v1.0.1/go.mod h1:UGzOrNV1mAFSEB63lOFHIpNRUVMvYTc6yu1SMY/XTDM=
 xorm.io/builder v0.3.11-0.20220531020008-1bd24a7dc978 h1:bvLlAPW1ZMTWA32LuZMBEGHAUOcATZjzHcotf3SWweM=
 xorm.io/builder v0.3.11-0.20220531020008-1bd24a7dc978/go.mod h1:aUW0S9eb9VCaPohFCH3j7czOx1PMW3i1HrSzbLYGBSE=
-xorm.io/xorm v1.3.8 h1:CJmplmWqfSRpLWSPMmqz+so8toBp3m7ehuRehIWedZo=
-xorm.io/xorm v1.3.8/go.mod h1:LsCCffeeYp63ssk0pKumP6l96WZcHix7ChpurcLNuMw=
+xorm.io/xorm v1.3.9 h1:TUovzS0ko+IQ1XnNLfs5dqK1cJl1H5uHpWbWqAQ04nU=
+xorm.io/xorm v1.3.9/go.mod h1:LsCCffeeYp63ssk0pKumP6l96WZcHix7ChpurcLNuMw=

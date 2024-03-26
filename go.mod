@@ -5,7 +5,7 @@ go 1.21.5
 require (
 	github.com/go-fed/httpsig v1.1.0
 	github.com/gofiber/contrib/websocket v1.3.0
-	github.com/gofiber/fiber/v2 v2.52.1
+	github.com/gofiber/fiber/v2 v2.52.3
 	github.com/gofiber/template/html/v2 v2.1.1
 	github.com/golang-jwt/jwt/v5 v5.2.0
 	github.com/hibiken/asynq v0.24.1
